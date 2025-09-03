@@ -1,5 +1,5 @@
 "use client";
-
+import Script from 'next/script';
 import React, { useState, useEffect } from 'react';
 
 // Define the types for your data structures
@@ -112,6 +112,7 @@ const Icon = ({ name, className }: { name: string; className: string }) => {
 const PDFScript = () => (
   <>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <Script src="https://your-script-url.com/path-to-script.js" strategy="lazyOnload" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   </>
 );
