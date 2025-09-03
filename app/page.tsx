@@ -1,39 +1,45 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image'; // Added this import for optimized images
-import Script from 'next/script'; // Added this import for safe script loading
+import Image from 'next/image';
+import Script from 'next/script';
 
 // Define the types for your data structures
-interface MockData {
-  aum: {
-    value: string;
-    change: string;
-    isPositive: boolean;
-  };
-  sip: {
-    value: string;
-    change: string;
-    isPositive: boolean;
-  };
-  stats: StatItem[];
-  clients: {
-    online: number;
-    new: number;
-    active: number;
-    inactive: number;
-  };
+interface AumData {
+  value: string;
+  change: string;
+  isPositive: boolean;
 }
 
-interface NavItem {
-  label: string;
-  href: string;
+interface SipData {
+  value: string;
+  change: string;
+  isPositive: boolean;
 }
 
 interface StatItem {
   label: string;
   value: string;
   icon: string;
+}
+
+interface ClientsData {
+  online: number;
+  new: number;
+  active: number;
+  inactive: number;
+}
+
+interface MockData {
+  aum: AumData;
+  sip: SipData;
+  stats: StatItem[];
+  clients: ClientsData;
+}
+
+interface NavItem {
+  label: string;
+  href: string;
 }
 
 // Define the types for the window object to recognize external libraries
@@ -85,8 +91,14 @@ const navItems: NavItem[] = [
   { label: 'Other', href: '#' },
 ];
 
+// Define props for Icon component
+interface IconProps {
+  name: string;
+  className: string;
+}
+
 // Helper component for Icons from lucide-react (simulated)
-const Icon = ({ name, className }: { name: string; className: string }) => {
+const Icon = ({ name, className }: IconProps) => {
   const icons: { [key: string]: JSX.Element } = {
     'file-text': (
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /><polyline points="14 2 14 8 20 8" /></svg>
@@ -112,11 +124,10 @@ const Icon = ({ name, className }: { name: string; className: string }) => {
 
 // We need to include these scripts from a CDN for PDF generation.
 const PDFScript = () => (
-  // Changed these from `<script>` to `<Script>` component for Next.js compatibility
-  <>
+  <div>
     <Script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" strategy="beforeInteractive" />
     <Script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" strategy="beforeInteractive" />
-  </>
+  </div>
 );
 
 export default function Home() {
@@ -255,13 +266,13 @@ export default function Home() {
         {/* Top Navigation Bar */}
         <nav className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
           <div className="flex items-center gap-2">
-            {/* Replaced <img> with Next.js <Image> component */}
             <Image
               src="https://placehold.co/40x40/000000/FFFFFF?text=W"
               alt="Wealth Elite Logo"
-              width={40} // `width` is a required prop for the Image component
-              height={40} // `height` is a required prop for the Image component
+              width={40}
+              height={40}
               className="rounded"
+              unoptimized // Added to handle SVG from external domain
             />
             <h1 className="text-xl font-bold">Wealth Elite</h1>
             <div className="relative hidden md:block">

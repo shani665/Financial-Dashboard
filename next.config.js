@@ -1,7 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['placehold.co'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+    dangerouslyAllowSVG: true, // Allow SVG optimization
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;", // Security policy for SVGs
   },
 };
 
