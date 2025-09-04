@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -39,3 +40,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 # Financial-Dashboard
 Developed a responsive and interactive financial dashboard to visualize key metrics like AUM (Assets Under Management) and SIP (Systematic Investment Plan) data. The tool includes features for filtering data by time range and generating downloadable PDF reports.
 >>>>>>> f5f08729d186f648c0a0a3620d039ab19557833d
+=======
+# Financial-Dashboard
+Developed a responsive and interactive financial dashboard to visualize key metrics like AUM (Assets Under Management) and SIP (Systematic Investment Plan) data. The tool includes features for filtering data by time range and generating downloadable PDF reports.
+>>>>>>> 03d3bc1358ec1fa3d954e082d9478c914b5d2432
