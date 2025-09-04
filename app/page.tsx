@@ -34,7 +34,7 @@ interface StatItem {
   icon: string;
 }
 
-// @ts-ignore
+// @ts-expect-error
 // Define the types for the window object to recognize external libraries
 declare global {
   interface Window {
@@ -123,7 +123,7 @@ const useDynamicScriptLoader = (urls: string[]) => {
     });
 
     const checkScripts = () => {
-      // @ts-ignore
+      // @ts-expect-error
       if (window.jspdf && window.html2canvas) {
         setLoaded(true);
       } else {
@@ -184,11 +184,11 @@ export default function Home() {
       return;
     }
     
-    // @ts-ignore
+    // @ts-expect-error
     const pdf = new window.jspdf.jsPDF('p', 'mm', 'a4');
     const scale = 2; // Increased scale for better resolution
 
-    // @ts-ignore
+    // @ts-expect-error
     const canvas = await window.html2canvas(input, {
       scale: scale,
       useCORS: true,
