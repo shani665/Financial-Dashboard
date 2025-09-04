@@ -34,7 +34,6 @@ interface StatItem {
   icon: string;
 }
 
-// @ts-ignore
 
 // Define the types for the window object to recognize external libraries
 declare global {
@@ -124,7 +123,7 @@ const useDynamicScriptLoader = (urls: string[]) => {
     });
 
     const checkScripts = () => {
-      // @ts-ignore
+     
 
       if (window.jspdf && window.html2canvas) {
         setLoaded(true);
@@ -186,12 +185,12 @@ export default function Home() {
       return;
     }
     
-    // @ts-ignore
+    
 
     const pdf = new window.jspdf.jsPDF('p', 'mm', 'a4');
     const scale = 2; // Increased scale for better resolution
 
-    // @ts-ignore
+    
 
     const canvas = await window.html2canvas(input, {
       scale: scale,
