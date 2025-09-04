@@ -34,6 +34,7 @@ interface StatItem {
   icon: string;
 }
 
+// @ts-ignore
 // Define the types for the window object to recognize external libraries
 declare global {
   interface Window {
@@ -108,19 +109,47 @@ const Icon = ({ name, className }: { name: string; className: string }) => {
   return icons[name] || null;
 };
 
-// We need to include these scripts from a CDN for PDF generation.
-const PDFScript = () => (
-  <>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  </>
-);
+// Custom hook to dynamically load scripts
+const useDynamicScriptLoader = (urls: string[]) => {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const scripts = urls.map(url => {
+      const script = document.createElement('script');
+      script.src = url;
+      script.async = true;
+      document.body.appendChild(script);
+      return script;
+    });
+
+    const checkScripts = () => {
+      // @ts-ignore
+      if (window.jspdf && window.html2canvas) {
+        setLoaded(true);
+      } else {
+        setTimeout(checkScripts, 50);
+      }
+    };
+
+    checkScripts();
+
+    return () => {
+      scripts.forEach(script => document.body.removeChild(script));
+    };
+  }, [urls]);
+
+  return loaded;
+};
 
 export default function Home() {
   const [activeTimeFilter, setActiveTimeFilter] = useState<string>('3 Days');
-  const [darkMode, setDarkMode] = useState<boolean>(true); // Changed this to 'true' for default dark mode
+  const [darkMode, setDarkMode] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(true);
   const [statData, setStatData] = useState<StatItem[]>(mockData.stats);
+  const scriptsLoaded = useDynamicScriptLoader([
+    'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
+  ]);
 
   useEffect(() => {
     // Simulate data fetching
@@ -144,8 +173,8 @@ export default function Home() {
   };
 
   const handleDownloadPDF = async () => {
-    if (typeof window.jspdf === 'undefined' || typeof window.html2canvas === 'undefined') {
-      console.error('PDF libraries not loaded.');
+    if (!scriptsLoaded) {
+      console.error('PDF libraries not loaded yet. Please wait.');
       return;
     }
 
@@ -154,9 +183,12 @@ export default function Home() {
       console.error('PDF content container not found.');
       return;
     }
+    
+    // @ts-ignore
     const pdf = new window.jspdf.jsPDF('p', 'mm', 'a4');
     const scale = 2; // Increased scale for better resolution
 
+    // @ts-ignore
     const canvas = await window.html2canvas(input, {
       scale: scale,
       useCORS: true,
@@ -246,7 +278,6 @@ export default function Home() {
 
   return (
     <div className={`min-h-screen font-sans ${darkMode ? 'dark bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'}`}>
-      <PDFScript />
       {/* Main container for PDF generation */}
       <div id="dashboard-content-to-pdf" className="p-4 md:p-8">
         {/* Top Navigation Bar */}
