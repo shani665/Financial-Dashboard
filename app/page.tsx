@@ -38,9 +38,19 @@ interface StatItem {
 // Define the types for the window object to recognize external libraries
 declare global {
   interface Window {
-    jspdf: any;
-    html2canvas: any;
+    jspdf?: any;
+    html2canvas?: any;
+  
   }
+}
+
+// Example function declarations (move outside declare global)
+const handleData = (data: Record<string, unknown>) => {
+  // tera code
+}
+
+const processInput = (input: string) => {
+  // tera code
 }
 
 // This is a mock data object. In a real application, you would fetch this from an API endpoint.
@@ -125,7 +135,7 @@ const useDynamicScriptLoader = (urls: string[]) => {
     const checkScripts = () => {
      
 
-      if (window.jspdf && window.html2canvas) {
+      if (typeof window.jspdf !== "undefined" && typeof window.html2canvas !== "undefined") {
         setLoaded(true);
       } else {
         setTimeout(checkScripts, 50);
